@@ -1,0 +1,17 @@
+# 忽略编译输出文件
+Output/
+*.hex
+*.map
+*.axf
+*.lst
+*.o
+*.d
+
+# 忽略 Keil 临时文件
+*.uvoptx
+*.uvguix.*
+*.bak
+
+# 忽略其他临时文件
+*.log
+*.tmp
