@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">智慧家具</string>
+    <string name="button_LED_ON">打开灯光</string>
+    <string name="button_LED_OFF">关闭灯光</string>
+    <string name="Fan">风扇</string>
+    <string name="MQTT">MQTT连接状态:</string>
+
+</resources>
