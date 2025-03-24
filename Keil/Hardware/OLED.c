@@ -1,5 +1,6 @@
 #include "stm32f10x.h"
 #include "OLED_Font.h"
+#include <stdio.h>
 
 /*引脚配置*/
 #define OLED_W_SCL(x)		GPIO_WriteBit(GPIOB, GPIO_Pin_8, (BitAction)(x))
@@ -261,6 +262,48 @@ void OLED_ShowBinNum(uint8_t Line, uint8_t Column, uint32_t Number, uint8_t Leng
 	{
 		OLED_ShowChar(Line, Column + i, Number / OLED_Pow(2, Length - i - 1) % 2 + '0');
 	}
+}
+
+/**
+  * @brief  OLED显示汉字
+  * @param  x     起始X坐标（范围 0~127）
+  * @param  y     起始Y坐标（范围 0~7，以8像素为单位）
+  * @param  index 汉字在字模数组中的索引
+  * @param  font  汉字字模数据
+  * @retval 无
+  */
+void OLED_ShowChinese(uint8_t x, uint8_t y, uint8_t index, const uint8_t font[][32])
+{
+    uint8_t i;
+    OLED_SetCursor(y, x);
+    for (i = 0; i < 16; i++) {
+        OLED_WriteData(font[index][i]);  // 显示上半部分
+    }
+    OLED_SetCursor(y + 1, x);
+    for (i = 0; i < 16; i++) {
+        OLED_WriteData(font[index][i + 16]);  // 显示下半部分
+    }
+}
+
+/**
+  * @brief  OLED显示图片
+  * @param  x     图片起始X坐标（范围 0~127）
+  * @param  y     图片起始Y坐标（范围 0~7）
+  * @param  width  图片宽度（像素）
+  * @param  height 图片高度（像素，必须是8的倍数）
+  * @param  img    图片点阵数据
+  * @retval 无
+  */
+void OLED_ShowImage(uint8_t x, uint8_t y, uint8_t width, uint8_t height, const uint8_t *img)
+{
+    uint8_t i, j;
+    uint16_t offset = 0;
+    for (i = 0; i < (height / 8); i++) {
+        OLED_SetCursor(y + i, x);
+        for (j = 0; j < width; j++) {
+            OLED_WriteData(img[offset++]);  // 逐字节写入显示数据
+        }
+    }
 }
 
 /**

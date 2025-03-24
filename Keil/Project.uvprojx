@@ -759,6 +759,16 @@
               <FileType>5</FileType>
               <FilePath>.\Hardware\DHT11.h</FilePath>
             </File>
+            <File>
+              <FileName>Timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Hardware\Timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Hardware\Timer.h</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

@@ -83,16 +83,26 @@ void Serial_SendString(const char *str) {
 //    buffer[i] = '\0';
 //}
 
-void USART1_IRQHandler(void) {	
-	static uint8_t pRxPacket = 0;	
-	if (USART_GetITStatus(USART1, USART_IT_RXNE) == SET) {
+void USART1_IRQHandler(void) {
+    static uint8_t pRxPacket = 0;  
+    static uint8_t receivingData = 0; 
+
+    if (USART_GetITStatus(USART1, USART_IT_RXNE) == SET) {
         uint8_t RxData = USART_ReceiveData(USART1);
-        Serial_RxPacket[pRxPacket++] = RxData;
-        
-        if (RxData == '\n') {  
-            Serial_RxPacket[pRxPacket] = '\0';
-            Serial_RxFlag = 1;
-            pRxPacket = 0;
+		//屏蔽掉无效指令，只保留以+开头的有效指令
+        if (RxData == '+') {
+			//数据有效，接收数据
+            receivingData = 1;  
+            Serial_RxPacket[pRxPacket++] = RxData;
+        } 
+        else if (receivingData) {
+            Serial_RxPacket[pRxPacket++] = RxData;
+            if (RxData == '\n') {
+                Serial_RxPacket[pRxPacket] = '\0'; 
+                Serial_RxFlag = 1;  
+                pRxPacket = 0;  
+                receivingData = 0; 
+            }
         }
         USART_ClearITPendingBit(USART1, USART_IT_RXNE);
     }
